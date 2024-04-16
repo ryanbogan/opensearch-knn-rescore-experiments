@@ -1,0 +1,6 @@
+nmslib 1: 35.33668613433838 seconds to run queries
+nmslib 2: 35.46980571746826 seconds to run queries
+faiss 1: 35.574172258377075 seconds to run queries
+faiss 2: 35.60338592529297 seconds to run queries
+lucene 1: 20.01723551750183 seconds to run queries
+lucene 2: 20.044759511947632 seconds to run queries
