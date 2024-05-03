@@ -1,0 +1,6 @@
+datastore.type = opensearch
+datastore.host = metrics
+datastore.port = 9202
+datastore.secure = False
+datastore.user =
+datastore.password =

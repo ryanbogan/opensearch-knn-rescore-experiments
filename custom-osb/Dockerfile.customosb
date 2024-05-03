@@ -1,0 +1,12 @@
+FROM opensearchproject/opensearch-benchmark:1.5.0
+
+USER 0
+RUN ["apt-get", "update"]
+RUN ["apt-get", "install", "jq", "--assume-yes"]
+USER 1000
+COPY osb-entry-point.sh /
+COPY custom /custom
+COPY bench-config-patch-script.sh /
+COPY benchmark.ini.patch /
+
+ENTRYPOINT ["bash", "/osb-entry-point.sh"]
