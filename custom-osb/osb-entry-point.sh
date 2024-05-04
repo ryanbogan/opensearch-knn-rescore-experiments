@@ -10,8 +10,8 @@ else
   export PROCEDURE="$1"
   export PARAMS="$2"
 fi
-echo PROCEDURE
-echo PARAMS
+echo $PROCEDURE
+echo $PARAMS
 
 # Initialize OSB so benchmark.ini gets created and patch benchmark.ini
 echo "Initializing OSB..."
