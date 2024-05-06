@@ -16,7 +16,7 @@ if ! ps -p $pid &> /dev/null; then
 fi
 
 # Get the output file name
-output_file="process-stats-$pid.csv"
+output_file="/profiles/process-stats-$pid.csv"
 
 # Write the header row
 echo "Timestamp,PID,CPU%,MEM(MB),MINOR_FAULTS,MAJOR_FAULTS,ANON_RSS(MB),ANON_FILE(MB)" > "$output_file"
