@@ -1,0 +1,4 @@
+FROM opensearchstaging/ci-runner:ci-runner-centos7-opensearch-build-v3
+COPY ./custom-build.sh /
+
+ENTRYPOINT ["bash", "/custom-build.sh"]
