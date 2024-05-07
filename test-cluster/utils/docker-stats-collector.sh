@@ -22,7 +22,7 @@ if ! docker inspect "$container_id" &> /dev/null; then
 fi
 
 # Get the output file name
-output_file="/tmp/profiles/stats-$container_id.csv"
+output_file="/tmp/profiles/docker-stats.csv"
 
 # Write the column names to the file
 echo "Timestamp,Memory Usage (MB),Memory Limit (MB),Memory Usage (%),CPU Usage (%),Read Throughput (MB/s),Write Throughput (MB/s)" > "$output_file"

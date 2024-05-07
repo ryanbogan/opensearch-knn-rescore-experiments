@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Sleep for 30 seconds so osb process can start
-sleep 30
+# Sleep for 180 seconds so osb process can start
+sleep 180
 
 # Check if a PID and duration were provided as command-line arguments
 if [ -z "$1" ] || [ -z "$2" ]; then

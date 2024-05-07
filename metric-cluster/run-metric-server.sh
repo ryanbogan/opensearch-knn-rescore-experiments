@@ -4,7 +4,7 @@
 # osb results
 
 OS_MEM=1G
-OS_CPU=1
+OS_CPU=2
 JVM_SIZE=512
 IMAGE=opensearchproject/opensearch:2.13.0
 
