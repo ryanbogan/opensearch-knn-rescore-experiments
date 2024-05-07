@@ -12,21 +12,18 @@ echo $PROCEDURE
 echo $PARAMS
 
 # Initialize OSB so benchmark.ini gets created and patch benchmark.ini
+echo "Initializing OSB..."
+opensearch-benchmark execute-test > /dev/null 2>&1
+bash /bench-config-patch-script.sh /benchmark.ini.patch ~/.benchmark/benchmark.ini
+cat ~/.benchmark/benchmark.ini
 
-if [ $ITERATION == 1 ]; then
-  echo "Initializing OSB..."
-  opensearch-benchmark execute-test > /dev/null 2>&1
-  bash /bench-config-patch-script.sh /benchmark.ini.patch ~/.benchmark/benchmark.ini
-  cat ~/.benchmark/benchmark.ini
+# Confirm access to metrics cluster
+echo "Confirming access to metrics cluster..."
+curl metrics:9202
 
-  # Confirm access to metrics cluster
-  echo "Confirming access to metrics cluster..."
-  curl metrics:9202
-
-  # Confirm access to test cluster
-  echo "Confirming access to test cluster..."
-  curl test:9200
-fi
+# Confirm access to test cluster
+echo "Confirming access to test cluster..."
+curl test:9200
 
 # Run OSB and write output to a particular file in results
 echo "Running OSB..."

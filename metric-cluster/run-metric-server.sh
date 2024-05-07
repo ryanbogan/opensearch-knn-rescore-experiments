@@ -23,3 +23,4 @@ container_id=$(docker run -d \
 ${IMAGE})
 
 echo "${container_id}"
+sleep 20
