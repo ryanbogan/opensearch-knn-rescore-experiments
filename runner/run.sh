@@ -2,13 +2,6 @@
 
 set -xe
 
-
-#TODO:
-# 1. More configurability on datasets/workloads
-# 2. Define prod experiments
-# 4. Add post-process to generate all of the graphs and everything
-
-
 # bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 4g 4 2 "no-train-test" "faiss-data-16-l2.json" 4g 4
 
 REMOTE_REPO=$1
@@ -25,7 +18,6 @@ OSB_CPU=$9
 echo "Making dirs"
 mkdir /tmp/profiles /tmp/artifacts /tmp/results /tmp/datasets
 
-
 # Second, build the custom image pointed at git
 echo "Building the custom image"
 cd ../custom-test-image/plugin-build
@@ -33,7 +25,6 @@ docker build -t pluginbuild -f Dockerfile.pluginbuild .
 docker run -v /tmp/artifacts:/artifacts pluginbuild $REMOTE_REPO $REMOTE_BRANCH
 cd ../
 bash run-custom-image-build.sh
-
 
 # Third, create the network
 echo "Creating the network"
@@ -44,25 +35,22 @@ echo "Starting the metric server"
 cd ../metric-cluster
 bash run-metric-server.sh
 
-# Fifth, run prod server
+## Fifth, run prod server
 echo "Starting prod server"
 cd ../test-cluster
 bash run-test-cluster.sh $OS_MEM $OS_CPU $JVM_SIZE
-
 
 # Sixth, start the OSB
 echo "Starting OSB job"
 cd ../custom-osb
 bash run-osb-container.sh $PROCEDURE $PARAMS $OSB_MEM $OSB_CPU 1
 
+# Seventh, rerun and get a profile
 echo "Re-running search workload with async profiling for 60s"
 sleep 30
 test_pid_pid=$(cat /tmp/test-pid)
 test_container_id=$(docker ps -aqf "name=test")
 docker exec -d $test_container_id bash /profile-helper.sh $test_pid_pid 60
 bash run-osb-container.sh search-only $PARAMS $OSB_MEM $OSB_CPU 2
-
-echo "Performing post processing work... (i.e. graph creation)"
-#TODO
 
 echo "Done!"

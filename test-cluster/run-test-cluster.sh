@@ -17,6 +17,8 @@ container_id=$(docker run -d \
 -p 9600:9600 \
 -e "discovery.type=single-node" \
 -e "OPENSEARCH_JAVA_OPTS=-Xms${JVM_SIZE}g -Xmx${JVM_SIZE}g" \
+--security-opt seccomp=unconfined \
+--cap-add SYS_ADMIN \
 ${IMAGE})
 sleep 15
 

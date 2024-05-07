@@ -17,17 +17,17 @@ if ! ps -p $java_pid &> /dev/null; then
 fi
 
 # Set the output file name
-output_file="/profiles/flamegraph-$java_pid.svg"
+output_file="/profiles/flamegraph.html"
 
 # Download and extract the async-profiler if it's not already available
 if ! command -v async-profiler &> /dev/null; then
     echo "Downloading and extracting async-profiler..."
-    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.8.1/async-profiler-2.8.1-linux-x64.tar.gz
+    curl -LO https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.8.1/async-profiler-2.8.1-linux-x64.tar.gz
     tar -xzf async-profiler-2.8.1-linux-x64.tar.gz
 fi
 
 # Run the async-profiler to generate the flame graph
 echo "Generating flame graph for Java process $java_pid for $duration seconds..."
-./async-profiler-2.8.1-linux-x64/profiler.sh -d $duration -f "$output_file" -s -o svg $java_pid
+./async-profiler-2.8.1-linux-x64/profiler.sh -d $duration -f "$output_file" -s -o flamegraph $java_pid
 
 echo "Flame graph generated: $output_file"
