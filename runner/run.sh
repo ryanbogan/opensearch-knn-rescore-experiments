@@ -18,7 +18,7 @@ REMOTE_BRANCH=exact-scoring-exps
 
 # First, setup prereqs
 echo "Setup prereqs"
-mkdir /tmp/profiles /tmp/artifacts /tmp/results
+mkdir -m 777 /tmp/profiles /tmp/artifacts /tmp/results
 docker network create cnetwork
 
 # Second, build the custom image pointed at git

@@ -11,7 +11,7 @@ echo $PROCEDURE
 echo $PARAMS
 
 # Extra steps for iteration 1
-if [ $ITERATION == 1 ]; then
+if [[ $ITERATION == 1 ]]; then
   # We build the image and then start the initial container. After which,
   # we need to attach to the container
   docker build -t customosb -f Dockerfile.customosb .

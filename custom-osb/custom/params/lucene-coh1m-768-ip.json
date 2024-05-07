@@ -24,6 +24,6 @@
     },
 
     "query_data_set_format": "hdf5",
-    "query_data_set_path":"cohere-1m",
+    "query_data_set_corpus":"cohere-1m",
     "query_count": 10000
   }
