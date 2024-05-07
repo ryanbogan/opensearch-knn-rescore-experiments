@@ -50,7 +50,7 @@ echo "Re-running search workload with async profiling for 60s"
 sleep 30
 test_pid_pid=$(cat /tmp/test-pid)
 test_container_id=$(docker ps -aqf "name=test")
-docker exec -d $test_container_id bash /profile-helper.sh $test_pid_pid 60
+docker exec -d $test_container_id -u 0 bash /profile-helper.sh $test_pid_pid 60
 bash run-osb-container.sh search-only $PARAMS $OSB_MEM $OSB_CPU 2
 
 echo "Done!"

@@ -8,3 +8,4 @@ RUN mkdir plugins/opensearch-knn
 COPY tmp/artifacts/opensearch-knn-2.14.0.0-SNAPSHOT.zip plugins/opensearch-knn/opensearch-knn-2.14.0.0-SNAPSHOT.zip
 RUN unzip plugins/opensearch-knn/opensearch-knn-2.14.0.0-SNAPSHOT.zip -d plugins/opensearch-knn/
 COPY utils/process-stats-collector.sh /process-stats-collector.sh
+COPY utils/profile-helper.sh /profile-helper.sh
