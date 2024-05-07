@@ -17,7 +17,7 @@ if ! ps -p $java_pid &> /dev/null; then
 fi
 
 # Set the output file name
-output_file="flamegraph-$java_pid.svg"
+output_file="/profiles/flamegraph-$java_pid.svg"
 
 # Download and extract the async-profiler if it's not already available
 if ! command -v async-profiler &> /dev/null; then

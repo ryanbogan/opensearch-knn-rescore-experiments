@@ -20,13 +20,8 @@ container_id=$(docker run -d \
 ${IMAGE})
 sleep 15
 
-
-#TODO: We'll need this later when we want to profile. This will need to be done via main runner.
-echo "CONTAINER_ID="$container_id
-
+#TODO: use this later for profiling
 PID=$(docker logs $container_id | grep -oE 'pid\[([0-9]+)\]' | sed 's/pid\[\([0-9]*\)\]/\1/')
-
-echo $PID
+echo $PID > /tmp/test-pid
 docker exec -d $container_id bash /process-stats-collector.sh $PID
-
 bash utils/docker-stats-collector.sh $container_id &

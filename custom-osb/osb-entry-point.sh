@@ -3,29 +3,30 @@
 set -x
 
 # Get the benchmark args
-if [ "$#" -ne 2 ]; then
-  export PROCEDURE="no-train-test"
-  export PARAMS="faiss-data-16-l2.json"
-else
-  export PROCEDURE="$1"
-  export PARAMS="$2"
-fi
+export PROCEDURE="$1"
+export PARAMS="$2"
+export ITERATION="$3"
+
+
 echo $PROCEDURE
 echo $PARAMS
 
 # Initialize OSB so benchmark.ini gets created and patch benchmark.ini
-echo "Initializing OSB..."
-opensearch-benchmark execute-test > /dev/null 2>&1
-bash /bench-config-patch-script.sh /benchmark.ini.patch ~/.benchmark/benchmark.ini
-cat ~/.benchmark/benchmark.ini
 
-# Confirm access to metrics cluster
-echo "Confirming access to metrics cluster..."
-curl metrics:9202
+if [ $ITERATION != 1 ]; then
+  echo "Initializing OSB..."
+  opensearch-benchmark execute-test > /dev/null 2>&1
+  bash /bench-config-patch-script.sh /benchmark.ini.patch ~/.benchmark/benchmark.ini
+  cat ~/.benchmark/benchmark.ini
 
-# Confirm access to test cluster
-echo "Confirming access to test cluster..."
-curl test:9200
+  # Confirm access to metrics cluster
+  echo "Confirming access to metrics cluster..."
+  curl metrics:9202
+
+  # Confirm access to test cluster
+  echo "Confirming access to test cluster..."
+  curl test:9200
+fi
 
 # Run OSB and write output to a particular file in results
 echo "Running OSB..."
@@ -43,7 +44,7 @@ opensearch-benchmark execute-test \
     --test-procedure=${PROCEDURE} \
     --kill-running-processes \
     --results-format=csv \
-    --results-file=/results/osb-results.csv | tee /tmp/output.txt
+    --results-file=/results/osb-results-${ITERATION}.csv | tee /tmp/output.txt
 
 task_id=$(cat /tmp/output.txt | grep "Test Execution ID" | awk -F ': ' '{print $2}')
 echo $task_id
@@ -109,7 +110,7 @@ recall=$(echo "$output" | jq -r '.aggregations["2"]["buckets"][0]["1"]["value"]'
 echo "hits: $hits"
 echo "recall: $recall"
 
-echo $recall > /results/recall.txt
+echo $recall > /results/recall-${ITERATION}.txt
 
 # Complete!
 echo "Success!"

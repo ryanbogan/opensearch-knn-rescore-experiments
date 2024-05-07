@@ -3,7 +3,13 @@
 set -xe
 
 
-bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 4g 4 2 "no-train-test" "faiss-data-16-l2.json"
+#TODO:
+# 1. More configurability on datasets/workloads
+# 2. Define prod experiments
+# 4. Add post-process to generate all of the graphs and everything
+
+
+# bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 4g 4 2 "no-train-test" "faiss-data-16-l2.json" 4g 4
 
 REMOTE_REPO=$1
 REMOTE_BRANCH=$2
@@ -12,19 +18,20 @@ OS_CPU=$4
 JVM_SIZE=$5
 PROCEDURE=$6
 PARAMS=$7
+OSB_MEM=$8
+OSB_CPU=$9
 
 # First, setup tmp dirs
 echo "Making dirs"
-mkdir /tmp/profiles /tmp/artifacts /tmp/artifacts /tmp/results /tmp/datasets
-
-
+mkdir /tmp/profiles /tmp/artifacts /tmp/results /tmp/datasets
 
 
 # Second, build the custom image pointed at git
 echo "Building the custom image"
-cd ../custom-test-image
+cd ../custom-test-image/plugin-build
 docker build -t pluginbuild -f Dockerfile.pluginbuild .
 docker run -v /tmp/artifacts:/artifacts pluginbuild $REMOTE_REPO $REMOTE_BRANCH
+cd ../
 bash run-custom-image-build.sh
 
 
@@ -44,11 +51,18 @@ bash run-test-cluster.sh $OS_MEM $OS_CPU $JVM_SIZE
 
 
 # Sixth, start the OSB
-#TODO: Add command to pull proper dataset
 echo "Starting OSB job"
 cd ../custom-osb
-cp /tmp/datasets/* custom/data/
-bash run-osb-container.sh $PROCEDURE $PARAMS
+bash run-osb-container.sh $PROCEDURE $PARAMS $OSB_MEM $OSB_CPU 1
 
+echo "Re-running search workload with async profiling for 60s"
+sleep 30
+test_pid_pid=$(cat /tmp/test-pid)
+test_container_id=$(docker ps -aqf "name=test")
+docker exec -d $test_container_id bash /profile-helper.sh $test_pid_pid 60
+bash run-osb-container.sh search-only $PARAMS $OSB_MEM $OSB_CPU 2
+
+echo "Performing post processing work... (i.e. graph creation)"
+#TODO
 
 echo "Done!"
