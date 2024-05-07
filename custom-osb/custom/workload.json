@@ -8,10 +8,23 @@
             "body": "{{ target_index_body }}"
         }
     ],
+    "corpora": [
+      {
+        "name": "cohere-1m",
+        "base-url": "https://dbyiw3u3rf9yr.cloudfront.net/corpora/vectorsearch/cohere-wikipedia-22-12-en-embeddings",
+        "documents": [
+          {
+            "source-file": "documents-1m.hdf5.bz2",
+            "source-format": "hdf5",
+            "document-count": 1000000
+          }
+        ]
+      }
+    ],
     "operations": [
       {{ benchmark.collect(parts="operations/*.json") }}
     ],
-      "test_procedures": [
-        {{ benchmark.collect(parts="test_procedures/*.json") }}
-      ]
+    "test_procedures": [
+      {{ benchmark.collect(parts="test_procedures/*.json") }}
+    ]
 }

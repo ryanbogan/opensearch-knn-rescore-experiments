@@ -2,7 +2,8 @@
 
 set -xe
 
-# bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 4g 4 2 "no-train-test" "faiss-data-16-l2.json" 4g 4
+# bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 6g 8 2 "no-train-test" "faiss-coh1m-768-l2.json" 64g 4
+# bash run.sh https://github.com/jmazanec15/k-NN-1.git 2.x 6g 8 2 "no-train-test" "faiss-data-16-l2.json" 64g 4
 
 REMOTE_REPO=$1
 REMOTE_BRANCH=$2
