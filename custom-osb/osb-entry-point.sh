@@ -13,7 +13,7 @@ echo $PARAMS
 
 # Initialize OSB so benchmark.ini gets created and patch benchmark.ini
 
-if [ $ITERATION != 1 ]; then
+if [ $ITERATION == 1 ]; then
   echo "Initializing OSB..."
   opensearch-benchmark execute-test > /dev/null 2>&1
   bash /bench-config-patch-script.sh /benchmark.ini.patch ~/.benchmark/benchmark.ini
