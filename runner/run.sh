@@ -24,6 +24,7 @@ cd ../custom-test-image/plugin-build
 docker build -t pluginbuild -f Dockerfile.pluginbuild .
 docker run -v /tmp/artifacts:/artifacts pluginbuild $REMOTE_REPO $REMOTE_BRANCH
 cd ../
+cd ../custom-test-image
 bash run-custom-image-build.sh
 
 # Third, create the network
@@ -35,7 +36,7 @@ echo "Starting the metric server"
 cd ../metric-cluster
 bash run-metric-server.sh
 
-## Fifth, run prod server
+# Fifth, run prod server
 echo "Starting prod server"
 cd ../test-cluster
 bash run-test-cluster.sh $OS_MEM $OS_CPU $JVM_SIZE
@@ -46,11 +47,12 @@ cd ../custom-osb
 bash run-osb-container.sh $PROCEDURE $PARAMS $OSB_MEM $OSB_CPU 1
 
 # Seventh, rerun and get a profile
-echo "Re-running search workload with async profiling for 60s"
+echo "Re-running search workload with async profiling for 300s"
 sleep 30
 test_pid_pid=$(cat /tmp/test-pid)
 test_container_id=$(docker ps -aqf "name=test")
-docker exec -d $test_container_id -u 0 bash /profile-helper.sh $test_pid_pid 60
+# TODO: If profile doesnt finish, we should handle it
+docker exec -d  -u 0 $test_container_id bash /profile-helper.sh $test_pid_pid 300
 bash run-osb-container.sh search-only $PARAMS $OSB_MEM $OSB_CPU 2
 
 echo "Done!"

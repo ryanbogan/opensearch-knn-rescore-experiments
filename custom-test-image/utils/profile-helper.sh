@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Sleep for 30 seconds so osb process can start
+sleep 30
+
 # Check if a PID and duration were provided as command-line arguments
 if [ -z "$1" ] || [ -z "$2" ]; then
     echo "Usage: $0 <java_process_id> <duration_in_seconds>"
