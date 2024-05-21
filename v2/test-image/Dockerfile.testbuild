@@ -1,17 +1,23 @@
-FROM opensearchstaging/ci-runner:ci-runner-centos7-opensearch-build-v3
+# Build the plugin
+FROM opensearchstaging/ci-runner:ci-runner-centos7-opensearch-build-v3 as build
 COPY ./build-plugin.sh /
-#TODO: We need to parametrize - but for later
-RUN bash /build-plugin.sh https://github.com/jmazanec15/k-NN-1.git exact-scoring-exps
+ARG TEST_REPO
+ARG TEST_BRANCH
+
+RUN bash /build-plugin.sh ${TEST_REPO} ${TEST_BRANCH}
 
 # Build the actual image
 FROM opensearchstaging/opensearch:2.14.0
-COPY --from=0 /home/ci-runner/k-NN-1/build/distributions/opensearch-knn-2.14.0.0-SNAPSHOT.zip /opensearch-knn-2.14.0.0-SNAPSHOT.zip
 USER root
 RUN yum install unzip procps -y
 USER opensearch
 RUN  rm -rf plugins/opensearch-knn
 RUN mkdir plugins/opensearch-knn
-COPY /opensearch-knn-2.14.0.0-SNAPSHOT.zip plugins/opensearch-knn/opensearch-knn-2.14.0.0-SNAPSHOT.zip
+COPY --from=build /home/ci-runner/k-NN-1/build/distributions/opensearch-knn-2.14.0.0-SNAPSHOT.zip plugins/opensearch-knn/opensearch-knn-2.14.0.0-SNAPSHOT.zip
 RUN unzip plugins/opensearch-knn/opensearch-knn-2.14.0.0-SNAPSHOT.zip -d plugins/opensearch-knn/
 COPY utils/process-stats-collector.sh /process-stats-collector.sh
 COPY utils/profile-helper.sh /profile-helper.sh
+COPY utils/profile-poller.sh /profile-poller.sh
+COPY custom-entrypoint.sh /custom-entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/custom-entrypoint.sh"]

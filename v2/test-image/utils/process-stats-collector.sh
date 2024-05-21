@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# Check if a PID was provided as a command-line argument
-if [ -z "$1" ]; then
-    echo "Usage: $0 <process_id>"
-    exit 1
-fi
+TELEMETRY_PATH=/share-data/telemetry
+mkdir -p -m 777 ${TELEMETRY_PATH}
 
 # Get the process ID
 pid=$1
+ITERATION=$2
 
 # Check if the process exists
 if ! ps -p $pid &> /dev/null; then
@@ -16,7 +14,7 @@ if ! ps -p $pid &> /dev/null; then
 fi
 
 # Get the output file name
-output_file="/profiles/process-stats.csv"
+output_file="${TELEMETRY_PATH}/process-stats-${ITERATION}.csv"
 
 # Write the header row
 echo "Timestamp,PID,CPU%,MEM(MB),MINOR_FAULTS,MAJOR_FAULTS,ANON_RSS(MB),ANON_FILE(MB)" > "$output_file"

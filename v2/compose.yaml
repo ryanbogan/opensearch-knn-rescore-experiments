@@ -1,0 +1,106 @@
+services:
+  test:
+    image: custom-os
+    build:
+      context: test-image
+      dockerfile: Dockerfile.testbuild
+      args:
+        TEST_REPO: ${TEST_REPO}
+        TEST_BRANCH: ${TEST_BRANCH}
+    container_name: test
+    environment:
+      - cluster.name=test
+      - node.name=test
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms${TEST_JVM} -Xmx${TEST_JVM}"
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "OSB_PROCEDURE=${OSB_PROCEDURE}"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - test:/usr/share/opensearch/data
+      - share-data:/share-data
+    ports:
+      - 9200:9200
+      - 9600:9600
+    networks:
+      - test-net
+    deploy:
+      resources:
+        limits:
+          cpus: "${TEST_CPU_COUNT}"
+          memory: ${TEST_MEM_SIZE}
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_ADMIN
+  metrics:
+    image: opensearchproject/opensearch:2.14.0
+    container_name: metrics
+    environment:
+      - cluster.name=metrics
+      - node.name=metrics
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - http.port=9202
+      - transport.port=9602
+      - "OPENSEARCH_JAVA_OPTS=-Xms${METRICS_JVM} -Xmx${METRICS_JVM}"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - metrics:/usr/share/opensearch/data
+    ports:
+      - 9202:9202
+      - 9602:9602
+    networks:
+      - test-net
+    deploy:
+      resources:
+        limits:
+          cpus: "${METRICS_CPU_COUNT}"
+          memory: ${METRICS_MEM_SIZE}
+  osb:
+    image: custom-osb
+    container_name: osb
+    build:
+      context: osb
+      dockerfile: Dockerfile.customosb
+    depends_on:
+      - metrics
+      - test
+    volumes:
+      - share-data:/share-data
+    networks:
+      - test-net
+    environment:
+      - "OSB_PROCEDURE=${OSB_PROCEDURE}"
+      - "OSB_PARAMS=${OSB_PARAMS}"
+      - "OSB_SHOULD_PROFILE=${OSB_SHOULD_PROFILE}"
+    deploy:
+      resources:
+        limits:
+          cpus: "${OSB_CPU_COUNT}"
+          memory: ${OSB_MEM_SIZE}
+volumes:
+  test:
+  metrics:
+  share-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /tmp/share-data
+networks:
+  test-net:
