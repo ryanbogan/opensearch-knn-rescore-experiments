@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start the test container
-IMAGE=customimage
+IMAGE=opensearchproject/opensearch:2.14.0
 OS_MEM=$1
 OS_CPU=$2
 JVM_SIZE=$3

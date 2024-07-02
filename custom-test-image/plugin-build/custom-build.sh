@@ -9,6 +9,7 @@ REPO_ENDPOINT=$1
 REPO_BRANCH=$2
 
 git clone -b $REPO_BRANCH $REPO_ENDPOINT
+# TODO make sure this aligns with repo name
 cd k-NN-1
 
 # Build the plugin (assume that it is snapshot 2.14 build)

@@ -13,8 +13,8 @@ PARAMS=$4
 OSB_MEM=$5
 OSB_CPU=$6
 
-REMOTE_REPO=https://github.com/jmazanec15/k-NN-1.git
-REMOTE_BRANCH=exact-scoring-exps
+REMOTE_REPO=https://github.com/rbogan/k-NN.git
+REMOTE_BRANCH=2.14
 
 # First, setup prereqs
 echo "Setup prereqs"
