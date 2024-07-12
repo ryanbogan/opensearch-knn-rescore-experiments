@@ -12,8 +12,8 @@ git clone -b $REPO_BRANCH $REPO_ENDPOINT
 # TODO make sure this aligns with repo name
 cd k-NN
 
-# Build the plugin (assume that it is snapshot 2.14 build)
-bash scripts/build.sh -v 2.14.0 -s true
-cp /home/ci-runner/k-NN/build/distributions/opensearch-knn-2.14.0.0-SNAPSHOT.zip /artifacts
+# Build the plugin (assume that it is snapshot 2.15 build)
+bash scripts/build.sh -v 2.15.0 -s true
+cp /home/ci-runner/k-NN/build/distributions/opensearch-knn-2.15.0.0-SNAPSHOT.zip /artifacts
 
 echo Success
