@@ -14,7 +14,7 @@ OSB_MEM=$5
 OSB_CPU=$6
 
 REMOTE_REPO=https://github.com/ryanbogan/k-NN.git
-REMOTE_BRANCH=2.15
+REMOTE_BRANCH=2.14
 
 # First, setup prereqs
 echo "Setup prereqs"
