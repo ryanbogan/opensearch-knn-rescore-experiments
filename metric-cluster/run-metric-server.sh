@@ -6,7 +6,7 @@
 OS_MEM=1G
 OS_CPU=2
 JVM_SIZE=512
-IMAGE=opensearchproject/opensearch:2.14.0
+IMAGE=opensearchproject/opensearch:2.17.1
 
 container_id=$(docker run -d \
 --name metrics \

@@ -8,4 +8,4 @@ REPO_ENDPOINT=$1
 REPO_BRANCH=$2
 git clone -b $REPO_BRANCH $REPO_ENDPOINT
 cd k-NN
-bash scripts/build.sh -v 2.14.0 -s true
+bash scripts/build.sh -v 2.17.1 -s true
