@@ -23,7 +23,7 @@ if [ $ITERATION == 1 ]; then
 
   # Confirm access to test cluster
   echo "Confirming access to test cluster..."
-  curl test:9200
+  curl http://test:9200
 fi
 
 
@@ -32,7 +32,7 @@ echo "Running OSB..."
 cd /custom
 
 # Setup params
-export ENDPOINT=test:9200
+export ENDPOINT=http://test:9200
 export PARAMS_FILE=params/${PARAMS}
 
 opensearch-benchmark execute-test \
