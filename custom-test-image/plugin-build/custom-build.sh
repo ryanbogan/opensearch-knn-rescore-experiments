@@ -13,7 +13,7 @@ git clone -b $REPO_BRANCH $REPO_ENDPOINT
 cd k-NN
 
 # Build the plugin (assume that it is snapshot 2.17 build)
-bash scripts/build.sh -v 2.17.1 -s true
+bash scripts/build.sh -v 2.17.1 -s true -a x64
 cp /home/ci-runner/k-NN/build/distributions/opensearch-knn-2.17.1.0-SNAPSHOT.zip /artifacts
 
 echo Success
